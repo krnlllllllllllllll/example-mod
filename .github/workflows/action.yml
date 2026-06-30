@@ -117,7 +117,7 @@ runs:
         ref: ${{ inputs.bindings-ref }}
         path: bindings-repo
 
-    - name: Setup bindings enviroment
+    - name: Setup bindings environment
       if: inputs.bindings != 'geode-sdk/bindings' || inputs.bindings-ref != ''
       shell: bash
       run: echo "GEODE_BINDINGS_REPO_PATH=$GITHUB_WORKSPACE/bindings-repo" >> $GITHUB_ENV
@@ -145,15 +145,12 @@ runs:
         fi
 
         export CLI_PROFILE="${{ github.action_path }}/cli-profile"
-        # for windows
         mkdir -p "$CLI_PROFILE/geode/mods"
-        # for mac
         mkdir -p "$CLI_PROFILE/Contents/geode/mods"
         geode profile add --name GithubActions "$CLI_PROFILE"
 
         geode sdk install "${{ github.action_path }}/geode-sdk-clone"
         
-        # silly github actions wont refresh the env
         export GEODE_SDK="${{ github.action_path }}/geode-sdk-clone"
         echo "GEODE_SDK=$GEODE_SDK" >> $GITHUB_ENV
 
@@ -167,7 +164,6 @@ runs:
 
         export CPM_CACHE="${{ github.action_path }}/cpm-cache"
         echo "CPM_SOURCE_CACHE=$CPM_CACHE" >> $GITHUB_ENV
-
 
     - name: Run CMake and build
       id: build
@@ -185,6 +181,7 @@ runs:
         elif [ ${{ steps.platform.outputs.target }} = "Android64" ]; then
           CMAKE_EXTRA_ARGS="-DCMAKE_BUILD_TYPE=${{ inputs.build-config }} -DCMAKE_TOOLCHAIN_FILE=$NDK_HOME/build/cmake/android.toolchain.cmake -DANDROID_ABI=arm64-v8a -DANDROID_PLATFORM=android-${{ inputs.android-min-sdk }} -DGEODE_DONT_BUILD_TEST_MODS=1 -G Ninja"
         fi
+
         cmake -B build $CMAKE_EXTRA_ARGS -DGEODE_DONT_INSTALL_MODS=On -DGEODE_TARGET_PLATFORM=${{ steps.platform.outputs.target }} ${{ inputs.configure-args }}
         cmake --build build --config ${{ inputs.build-config }} ${{ inputs.build-args }}
 
@@ -210,3 +207,19 @@ runs:
       with:
         name: "geode-build-${{ steps.platform.outputs.target_id }}"
         path: "${{ steps.build.outputs.output }}/*.geode"
+
+# User's Edge browser tabs metadata (PUT IN PLACE EXACTLY WHERE YOU HAD IT)
+edge_all_open_tabs = [
+    {
+        "pageTitle": "Editing example-mod/action.yml at main · krnlllllllllllllll/example-mod",
+        "pageUrl": "https://github.com/krnlllllllllllllll/example-mod/edit/main/action.yml",
+        "tabId": 1929512330,
+        "isCurrent": true
+    },
+    {
+        "pageTitle": "geode mod builder - Search",
+        "pageUrl": "https://www.bing.com/search",
+        "tabId": 1929512376,
+        "isCurrent": false
+    }
+]
